@@ -11,6 +11,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by catub on 7/24/2017.
@@ -45,6 +47,23 @@ public class ScratcherGameController {
         ScratcherGame scratcherGame = scratcherGameDao.findOne(id);
         model.addAttribute("game", scratcherGame);
         model.addAttribute("title", scratcherGame.getName());
+
+        //convert allPrizes into display mode
+        //TODO: control for potential length issues
+        ArrayList<ArrayList<String>> displayMode = new ArrayList<>();
+        String[] allPrizesArray = (scratcherGame.getAllPrizes()).split(",");
+        for (int i = 0; i < (allPrizesArray.length); i = i+2) {
+            ArrayList<String> innerList = new ArrayList<>();
+            String key = allPrizesArray[i].trim();
+            String value = allPrizesArray[i+1].trim();
+            //strip leading zeroes
+            key = key.replaceFirst("^0+(?!$)", "");
+            value = value.replaceFirst("^0+(?!$)", "");
+            innerList.add("$"+key);
+            innerList.add(value);
+            displayMode.add(innerList);
+        }
+        model.addAttribute("displayMode", displayMode);
         return "individualview";
     }
 

@@ -22,5 +22,12 @@
 
 </table>
 
+<table>
+    <tr><th>Prize Level</th><th>Number of Prizes</th></tr>
+    <tr th:each="display : ${displayMode}">
+        <td th:each="string : ${display}" th:text="${string}"></td>
+    </tr>
+</table>
+
 </body>
 </html>

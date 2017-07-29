@@ -81,6 +81,10 @@ public abstract class ScratcherGame{
         this.allPrizes = allPrizes;
     }
 
+    public void setTotalPrizeMoneyRemaining(double totalPrizeMoneyRemaining) {
+        this.totalPrizeMoneyRemaining = totalPrizeMoneyRemaining;
+    }
+
     public void recalculateOdds() {
         //set accumulators
         double numberOfWinningTickets = 0;
