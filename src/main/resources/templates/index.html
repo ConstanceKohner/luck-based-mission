@@ -12,13 +12,14 @@
 <table class="table">
 
     <tr>
-        <th>Game Number</th>
-        <th>Name</th>
+        <th>Game Name</th>
+        <th>Number</th>
+        <th>Expected Return</th>
     </tr>
 
     <tr th:each="game : ${alloverviewgames}">
-        <td><a th:href="'/' + ${game.uidNumber}" th:text="${game.gameID}">Default Text</a></td>
         <td><a th:href="'/' + ${game.uidNumber}" th:text="${game.name}">Default Text</a></td>
+        <td><a th:href="'/' + ${game.uidNumber}" th:text="'#' + ${game.gameID}">Default Text</a></td>
         <td><a th:href="'/' + ${game.uidNumber}" th:text="${game.expectedReturn}">Default Text</a></td>
     </tr>
 
