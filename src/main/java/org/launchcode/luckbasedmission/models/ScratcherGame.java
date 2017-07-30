@@ -1,6 +1,9 @@
 package org.launchcode.luckbasedmission.models;
 
 import javax.persistence.*;
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.*;
 
 /**
@@ -131,6 +134,16 @@ public abstract class ScratcherGame{
 
     //getters start here, public getters for all fields
 
+    public static String dollarFormat(double field) {
+        NumberFormat dollars = NumberFormat.getCurrencyInstance();
+        return dollars.format(field);
+    }
+
+    public static String integerFormat(double field) {
+        NumberFormat integer = NumberFormat.getIntegerInstance();
+        return integer.format(field);
+    }
+
     public int getUidNumber() {
         return uidNumber;
     }
@@ -145,6 +158,10 @@ public abstract class ScratcherGame{
 
     public double getTicketPrice() {
         return ticketPrice;
+    }
+
+    public String getTicketPriceFormatted() {
+        return dollarFormat(this.getTicketPrice());
     }
 
     public Date getStartDate() {
@@ -163,20 +180,40 @@ public abstract class ScratcherGame{
         return estimatedWinningTicketsRemaining;
     }
 
+    public String getEstimatedWinningTicketsFormatted() {
+        return integerFormat(this.getEstimatedWinningTicketsRemaining());
+    }
+
     public double getEstimatedTotalTicketsRemaining() {
         return estimatedTotalTicketsRemaining;
+    }
+
+    public String getEstimatedTotalTicketsRemainingFormatted() {
+        return integerFormat(this.getEstimatedTotalTicketsRemaining());
     }
 
     public double getEstimatedTotalPrizeMoneyRemaining() {
         return estimatedTotalPrizeMoneyRemaining;
     }
 
+    public String getEstimatedTotalPrizeMoneyRemainingFormatted() {
+        return dollarFormat(this.getEstimatedTotalPrizeMoneyRemaining());
+    }
+
     public double getTotalPrizeMoneyRemaining() {
         return totalPrizeMoneyRemaining;
     }
 
+    public String getTotalPrizeMoneyRemainingFormatted() {
+        return dollarFormat(this.getTotalPrizeMoneyRemaining());
+    }
+
     public double getExpectedReturn() {
         return expectedReturn;
+    }
+
+    public String getExpectedReturnFormatted() {
+        return dollarFormat(this.getExpectedReturn());
     }
 
 }

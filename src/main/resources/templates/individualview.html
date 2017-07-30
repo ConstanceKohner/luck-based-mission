@@ -8,25 +8,30 @@
 <h1 th:text="${title}">Default Title</h1>
 
 <table th:object="${game}" class="table">
-
-    <tr><td>Game Name:</td> <td th:text="*{name}"></td></tr>
-    <tr><td>Game Number:</td> <td th:text="*{gameID}"></td></tr>
-    <tr><td>Ticket Price:</td><td th:text="*{ticketPrice}"></td></tr>
+    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
+    <tr><th>Game Name:</th> <th th:text="*{name}"></th></tr>
+    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
+    <tr><td>Game Number:</td> <td th:text=" '#' + *{gameID}"></td></tr>
+    <tr><td>Ticket Price:</td><td th:text="${game.getTicketPriceFormatted()}"></td></tr>
     <tr><td>Start Date:</td><td th:text="*{startDate}"></td></tr>
-    <tr><td>Average Win Chance</td><td th:text="'1 in ' + *{averageWinLossChance}"></td></tr>
-
-    <tr><td>Expected Return</td><td th:text="*{expectedReturn}"></td></tr>
-    <tr><td>Winning Tickets Remaining</td><td th:text="*{estimatedWinningTicketsRemaining}"></td></tr>
-    <tr><td>Estimated Tickets Remaining</td><td th:text="*{estimatedTotalTicketsRemaining}"></td></tr>
-    <tr><td>Prize Money Remaining</td><td th:text="*{estimatedTotalPrizeMoneyRemaining}"></td></tr>
-
+    <tr><td>Average Win Chance</td><td th:text=" '1 in ' + *{averageWinLossChance}"></td></tr>
+    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
+    <tr><td>Expected Return</td><td th:class="${sign}" th:text="${game.getExpectedReturnFormatted()} + ' per ticket'"></td></tr>
+    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
 </table>
 
-<table>
+<table class="table">
+    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
     <tr><th>Prize Level</th><th>Number of Prizes</th></tr>
+    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
     <tr th:each="display : ${displayMode}">
         <td th:each="string : ${display}" th:text="${string}"></td>
     </tr>
+    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
+
+    <tr><td>Winning Tickets Remaining</td><td th:text="${game.getEstimatedWinningTicketsFormatted()}"></td></tr>
+    <tr><td>Estimated Tickets Remaining</td><td th:text="${game.getEstimatedTotalTicketsRemainingFormatted()}"></td></tr>
+    <tr><td>Prize Money Remaining</td><td th:text="${game.getEstimatedTotalPrizeMoneyRemainingFormatted()}"></td></tr>
 </table>
 
 </body>

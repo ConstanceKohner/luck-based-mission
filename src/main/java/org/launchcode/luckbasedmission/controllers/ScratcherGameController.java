@@ -11,6 +11,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,13 +54,19 @@ public class ScratcherGameController {
         ArrayList<ArrayList<String>> displayMode = new ArrayList<>();
         String[] allPrizesArray = (scratcherGame.getAllPrizes()).split(",");
         for (int i = 0; i < (allPrizesArray.length); i = i+2) {
+            //create the inner list
             ArrayList<String> innerList = new ArrayList<>();
-            String key = allPrizesArray[i].trim();
-            String value = allPrizesArray[i+1].trim();
-            //strip leading zeroes
-            key = key.replaceFirst("^0+(?!$)", "");
-            value = value.replaceFirst("^0+(?!$)", "");
-            innerList.add("$"+key);
+
+            //change the dollar amount formatting
+            NumberFormat dollars = NumberFormat.getCurrencyInstance();
+            String key = dollars.format(Double.parseDouble(allPrizesArray[i]));
+
+            //change the integer formatting
+            NumberFormat integer = NumberFormat.getIntegerInstance();
+            String value = integer.format(Double.parseDouble(allPrizesArray[i+1]));
+
+            //add both to the inner list and add the inner list to the outer list
+            innerList.add(key);
             innerList.add(value);
             displayMode.add(innerList);
         }
