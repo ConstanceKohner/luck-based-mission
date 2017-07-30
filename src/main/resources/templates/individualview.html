@@ -16,8 +16,9 @@
     <tr><td>Start Date:</td><td th:text="*{startDate}"></td></tr>
     <tr><td>Average Win Chance</td><td th:text=" '1 in ' + *{averageWinLossChance}"></td></tr>
     <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
-    <tr><td>Expected Return</td><td th:class="${sign}" th:text="${game.getExpectedReturnFormatted()} + ' per ticket'"></td></tr>
+    <tr><td>Average Win or Loss</td><td th:class="${sign}" th:text="${game.getExpectedReturnFormatted()} + ' per ticket'"></td></tr>
     <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
+    <tr><td>Detailed Expected Return</td><td th:class="${sign}" th:text="${game.getExpectedReturn()} + ' per ticket'"></td></tr>
 </table>
 
 <table class="table">
@@ -25,13 +26,14 @@
     <tr><th>Prize Level</th><th>Number of Prizes</th></tr>
     <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
     <tr th:each="display : ${displayMode}">
-        <td th:each="string : ${display}" th:text="${string}"></td>
+        <td th:each="string : ${display}" th:text="${string}" class="right-align"></td>
     </tr>
     <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
 
     <tr><td>Winning Tickets Remaining</td><td th:text="${game.getEstimatedWinningTicketsFormatted()}"></td></tr>
     <tr><td>Estimated Tickets Remaining</td><td th:text="${game.getEstimatedTotalTicketsRemainingFormatted()}"></td></tr>
     <tr><td>Prize Money Remaining</td><td th:text="${game.getEstimatedTotalPrizeMoneyRemainingFormatted()}"></td></tr>
+    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
 </table>
 
 </body>
