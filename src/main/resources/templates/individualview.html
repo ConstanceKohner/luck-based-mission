@@ -17,7 +17,7 @@
     <tr><td>Average Win Chance</td><td th:text=" '1 in ' + *{averageWinLossChance}"></td></tr>
     <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
     <tr><td>Expected Return</td><td th:class="${game.getSign()}" th:text="${game.getExpectedReturnFormatted()} + ' per ticket'"></td></tr>
-    <tr><td>As percentage of Ticket Price</td><td th:class="${game.getSign()}" th:text="${game.getReturnPercentageFormatted()} + 'of original ticket price'"></td></tr></tr>
+    <tr><td>As percentage of Ticket Price</td><td th:class="${game.getSign()}" th:text="${game.getReturnPercentageFormatted()} + ' of original ticket price'"></td></tr>
     <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
 </table>
 
@@ -34,7 +34,7 @@
     <tr><td>Estimated Tickets Remaining</td><td th:text="${game.getEstimatedTotalTicketsRemainingFormatted()}"></td></tr>
     <tr><td>Prize Money Remaining</td><td th:text="${game.getEstimatedTotalPrizeMoneyRemainingFormatted()}"></td></tr>
     <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
-    <tr><td>Detailed Expected Return</td><td th:class="${sign}" th:text="${game.getExpectedReturn()} + ' per ticket'"></td></tr>
+    <tr><td>Detailed Expected Return</td><td th:class="${sign}" th:text="${game.getExpectedReturn()} + ' dollars per ticket'"></td></tr>
 </table>
 
 </body>
