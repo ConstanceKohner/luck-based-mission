@@ -16,7 +16,8 @@
     <tr><td>Start Date:</td><td th:text="${game.getStartDate()}"></td></tr>
     <tr><td>Average Win Chance</td><td th:text=" '1 in ' + *{averageWinLossChance}"></td></tr>
     <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
-    <tr><td>Average Win or Loss</td><td th:class="${sign}" th:text="${game.getExpectedReturnFormatted()} + ' per ticket'"></td></tr>
+    <tr><td>Expected Return</td><td th:class="${game.getSign()}" th:text="${game.getExpectedReturnFormatted()} + ' per ticket'"></td></tr>
+    <tr><td>As percentage of Ticket Price</td><td th:class="${game.getSign()}" th:text="${game.getReturnPercentageFormatted()} + 'of original ticket price'"></td></tr></tr>
     <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
 </table>
 

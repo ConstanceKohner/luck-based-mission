@@ -247,6 +247,26 @@ public abstract class ScratcherGame{
         return expectedReturn;
     }
 
+    public double getReturnPercentage() {
+        return (this.getExpectedReturn() / this.ticketPrice);
+    }
+
+    public String getReturnPercentageFormatted() {
+        double fraction = this.getExpectedReturn() / this.ticketPrice;
+        String returnPercentage = MessageFormat.format("{0,number,#.##%}", fraction);
+        return returnPercentage;
+    }
+
+    //tells template whether return is negative or positive for css
+    //TODO: create additional levels to color code as a gradient of best to worst
+    public String getSign() {
+        if (this.getExpectedReturn() < 0) {
+            return "negative";
+        } else {
+            return "positive";
+        }
+    }
+
     public String getExpectedReturnFormatted() {
         return dollarFormat(this.getExpectedReturn());
     }

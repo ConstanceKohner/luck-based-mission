@@ -12,15 +12,21 @@
 <table class="table">
 
     <tr>
+        <th>Start Date</th>
         <th>Game Name</th>
         <th>Number</th>
+        <th>Ticket Price</th>
         <th>Expected Return</th>
+        <th>As Percentage of Ticket Price</th>
     </tr>
 
     <tr th:each="game : ${alloverviewgames}">
+        <td><p th:text="${game.getStartDate()}">Default Text</p></td>
         <td><a th:href="'/' + ${game.uidNumber}" th:text="${game.name}">Default Text</a></td>
-        <td><a th:href="'/' + ${game.uidNumber}" th:text="'#' + ${game.gameID}">Default Text</a></td>
-        <td><a th:href="'/' + ${game.uidNumber}" th:text="${game.expectedReturn}">Default Text</a></td>
+        <td><p th:text="'#' + ${game.gameID}">Default Text</p></td>
+        <td><p th:text="${game.getTicketPriceFormatted()}">Default Text</p></td>
+        <td><p th:class="${game.getSign()}" th:text="${game.getExpectedReturnFormatted()}">Default Text</p></td>
+        <td><p th:class="${game.getSign()}" th:text="${game.getReturnPercentageFormatted()}">Default Text</p></td>
     </tr>
 
 </table>

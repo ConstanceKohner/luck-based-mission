@@ -71,6 +71,7 @@ public class ScratcherGameController {
             displayMode.add(innerList);
         }
         model.addAttribute("displayMode", displayMode);
+
         return "individualview";
     }
 
