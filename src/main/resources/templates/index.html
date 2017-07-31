@@ -20,7 +20,7 @@
         <th>As Percentage of Ticket Price</th>
     </tr>
 
-    <tr th:each="game : ${alloverviewgames}">
+    <tr th:each="game : ${allgames}">
         <td><p th:text="${game.getStartDate()}">Default Text</p></td>
         <td><a th:href="'/' + ${game.uidNumber}" th:text="${game.name}">Default Text</a></td>
         <td><p th:text="'#' + ${game.gameID}">Default Text</p></td>
