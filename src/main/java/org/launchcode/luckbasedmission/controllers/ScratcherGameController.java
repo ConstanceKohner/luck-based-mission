@@ -3,6 +3,7 @@ package org.launchcode.luckbasedmission.controllers;
 import org.launchcode.luckbasedmission.models.ScratcherGame;
 import org.launchcode.luckbasedmission.models.ScratcherGameCustom;
 import org.launchcode.luckbasedmission.models.ScratcherGameOverview;
+import org.launchcode.luckbasedmission.models.ScratcherGameSnapshot;
 import org.launchcode.luckbasedmission.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -82,14 +83,14 @@ public class ScratcherGameController {
     }
 
     //put data in database, this will be replaced later
-    @RequestMapping(value="addoverview", method=RequestMethod.GET)
+    @RequestMapping(value="addOverview", method=RequestMethod.GET)
     public String displayOverviewGameForm (Model model) {
         model.addAttribute("title", "Add a New Scratcher Overview");
         model.addAttribute(new ScratcherGameOverview());
         return "addoverviewgame";
     }
 
-    @RequestMapping(value="addoverview", method=RequestMethod.POST)
+    @RequestMapping(value="addOverview", method=RequestMethod.POST)
     public String processOverviewGameForm (@ModelAttribute @Valid ScratcherGameOverview scratcherGameOverview, Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add a New Scratcher Overview");
@@ -98,6 +99,35 @@ public class ScratcherGameController {
         //originally, recalculate odds was run internally, but this caused problems.  it is best to run it before saving each time.
         scratcherGameOverview.recalculateOdds();
         scratcherGameOverviewDao.save(scratcherGameOverview);
+        return "redirect:";
+    }
+
+    @RequestMapping(value="addSnapshot", method=RequestMethod.GET)
+    public String displaySnapshotGameForm (Model model) {
+        model.addAttribute("title", "Add a New Daily Snapshot");
+        model.addAttribute(new ScratcherGameSnapshot());
+        model.addAttribute("scratcherGameOverviews", scratcherGameOverviewDao.findAll());
+        return "addsnapshotgame";
+    }
+
+    @RequestMapping(value = "addSnapshot", method = RequestMethod.POST)
+    public String processSnapshotGameForm (@ModelAttribute @Valid ScratcherGameSnapshot scratcherGameSnapshot, Errors errors, @RequestParam int scratcherGameUID, Model model) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Add a New Daily Snapshot");
+            return "addsnapshotgame";
+        }
+        ScratcherGameOverview scratcherGame = scratcherGameOverviewDao.findOne(scratcherGameUID);
+        scratcherGameSnapshot.setOverviewGame(scratcherGame);
+        scratcherGameSnapshot.setName(scratcherGame.getName());
+        scratcherGameSnapshot.setGameID(scratcherGame.getGameID());
+        scratcherGameSnapshot.setTicketPrice(scratcherGame.getTicketPrice());
+        scratcherGameSnapshot.setStartMonth(scratcherGame.getStartMonth());
+        scratcherGameSnapshot.setStartDay(scratcherGame.getStartDay());
+        scratcherGameSnapshot.setStartYear(scratcherGame.getStartYear());
+        scratcherGameSnapshot.setAverageWinLossChance(scratcherGame.getAverageWinLossChance());
+        scratcherGameSnapshot.recalculateOdds();
+        scratcherGameSnapshotDao.save(scratcherGameSnapshot);
         return "redirect:";
     }
 /*
