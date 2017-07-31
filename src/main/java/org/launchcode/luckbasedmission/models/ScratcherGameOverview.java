@@ -11,6 +11,15 @@ import java.util.List;
  */
 @Entity
 public class ScratcherGameOverview extends ScratcherGame {
+
+    @OneToMany
+    @JoinColumn(name = "scratcher_game_uid_number")
+    private List<ScratcherGameSnapshot> snapshotGames = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "scratcher_game_uid_number")
+    private List<ScratcherGameCustom> customGames = new ArrayList<>();
+
     public ScratcherGameOverview() {
     }
 }
