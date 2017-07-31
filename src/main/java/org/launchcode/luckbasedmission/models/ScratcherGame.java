@@ -2,8 +2,11 @@ package org.launchcode.luckbasedmission.models;
 
 import javax.persistence.*;
 import java.text.FieldPosition;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -27,7 +30,11 @@ public abstract class ScratcherGame{
     private double ticketPrice;
 
     //for completeness of information and eventual sorting options
-    private Date startDate;
+    private int startDay;
+
+    private int startMonth;
+
+    private int startYear;
 
     //this will be the denominator of the 1 in X odds.  estimatedWinningTicketsRemaining x averageWinLossChance = estimatedTotalTicketsRemaining
     //it may make sense to refactor this to have estimatedTotalTicketsRemaining be a get method rather than a field, but it may be useful for CustomGame
@@ -71,8 +78,23 @@ public abstract class ScratcherGame{
         this.ticketPrice = ticketPrice;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    /*public void setStartDate(String startDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+        formatter = formatter.withLocale( Locale.US );
+        LocalDate localDate = LocalDate.parse(startDate, formatter);
+        this.startDate = localDate;
+    }*/
+
+    public void setStartDay(int startDay) {
+        this.startDay = startDay;
+    }
+
+    public void setStartMonth(int startMonth) {
+        this.startMonth = startMonth;
+    }
+
+    public void setStartYear(int startYear) {
+        this.startYear = startYear;
     }
 
     public void setAverageWinLossChance(double averageWinLossChance) {
@@ -81,6 +103,7 @@ public abstract class ScratcherGame{
 
     //originally, recalculate odds was run within setAllPrizes, but this caused problems.  it is best to run it before saving each time.
     public void setAllPrizes(String allPrizes) {
+        allPrizes = allPrizes.trim();
         this.allPrizes = allPrizes;
     }
 
@@ -164,8 +187,20 @@ public abstract class ScratcherGame{
         return dollarFormat(this.getTicketPrice());
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public int getStartDay() {
+        return startDay;
+    }
+
+    public int getStartMonth() {
+        return startMonth;
+    }
+
+    public int getStartYear() {
+        return startYear;
+    }
+
+    public LocalDate getStartDate() {
+        return LocalDate.of(this.startYear, this.startMonth, this.startDay);
     }
 
     public double getAverageWinLossChance() {

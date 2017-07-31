@@ -99,7 +99,7 @@ public class ScratcherGameController {
         scratcherGameOverviewDao.save(scratcherGameOverview);
         return "redirect:";
     }
-
+/*
     //TODO "simulate odds based on this game" takes user to a form for a CustomGame with starting values equal to the game they chose
     @RequestMapping(value="addcustom", method=RequestMethod.GET)
     public String displayCustomGameForm (Model model) {
@@ -121,4 +121,5 @@ public class ScratcherGameController {
         scratcherGameCustomDao.save(scratcherGameCustom);
         return "redirect:";
     }
+    */
 }

@@ -24,12 +24,27 @@
         <span th:errors="*{ticketPrice}" class="error"></span>
     </div>
     <div class="form-group">
+        <label th:for="startMonth">Official Start Month</label>
+        <input class="form-control" th:field="*{startMonth}" />
+        <span th:errors="*{startMonth}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="startDay">Official Start Day</label>
+        <input class="form-control" th:field="*{startDay}" />
+        <span th:errors="*{startDay}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="startYear">Official Start Year</label>
+        <input class="form-control" th:field="*{startYear}" />
+        <span th:errors="*{startYear}" class="error"></span>
+    </div>
+    <div class="form-group">
         <label th:for="averageWinLossChance">Average Win Loss Chance</label>
         <input class="form-control" th:field="*{averageWinLossChance}" />
         <span th:errors="*{averageWinLossChance}" class="error"></span>
     </div>
     <div class="form-group">
-        <label th:for="allPrizes">Prize Table (separated by commas, no spaces)</label>
+        <label th:for="allPrizes">Prize Table (separated by commas)</label>
         <input class="form-control" th:field="*{allPrizes}" />
         <span th:errors="*{allPrizes}" class="error"></span>
     </div>
