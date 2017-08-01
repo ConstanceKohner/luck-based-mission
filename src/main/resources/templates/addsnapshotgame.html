@@ -10,7 +10,7 @@
 <form method="post" th:object="${scratcherGameSnapshot}">
     <div class="form-group">
         <label th:for="scratcherGameOverviews">For Game</label>
-        <select name="scratcherGameUID">
+        <select name="scratcherGameOverviewUidNumber">
             <option th:each="scratcherGameOverview : ${scratcherGameOverviews}"
                     th:text="${scratcherGameOverview.name} + ', ' + ${scratcherGameOverview.gameID}"
                     th:value="${scratcherGameOverview.uidNumber}"></option>
@@ -18,19 +18,19 @@
     </div>
 
     <div class="form-group">
-        <label th:for="snapshotMonth">Month of Snapshot</label>
-        <input class="form-control" th:field="*{snapshotMonth}" />
-        <span th:errors="*{snapshotMonth}" class="error"></span>
+        <label th:for="createdMonth">Month of Snapshot</label>
+        <input class="form-control" th:field="*{createdMonth}" />
+        <span th:errors="*{createdMonth}" class="error"></span>
     </div>
     <div class="form-group">
-        <label th:for="snapshotDay">Day of Snapshot</label>
-        <input class="form-control" th:field="*{snapshotDay}" />
-        <span th:errors="*{snapshotDay}" class="error"></span>
+        <label th:for="createdDay">Day of Snapshot</label>
+        <input class="form-control" th:field="*{createdDay}" />
+        <span th:errors="*{createdDay}" class="error"></span>
     </div>
     <div class="form-group">
-        <label th:for="snapshotYear">Year of Snapshot</label>
-        <input class="form-control" th:field="*{snapshotYear}" />
-        <span th:errors="*{snapshotYear}" class="error"></span>
+        <label th:for="createdYear">Year of Snapshot</label>
+        <input class="form-control" th:field="*{createdYear}" />
+        <span th:errors="*{createdYear}" class="error"></span>
     </div>
 
     <div class="form-group">
@@ -39,7 +39,7 @@
         <span th:errors="*{allPrizes}" class="error"></span>
     </div>
     <div class="form-group">
-        <label th:for="totalPrizeMoneyRemaining">Total Prize Money</label>
+        <label th:for="totalPrizeMoneyRemaining">Remaining Prize Money</label>
         <input class="form-control" th:field="*{totalPrizeMoneyRemaining}" />
         <span th:errors="*{totalPrizeMoneyRemaining}" class="error"></span>
     </div>

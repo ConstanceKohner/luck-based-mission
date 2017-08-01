@@ -36,6 +36,12 @@ public abstract class ScratcherGame{
 
     private int startYear;
 
+    private int createdDay;
+
+    private int createdMonth;
+
+    private int createdYear;
+
     //this will be the denominator of the 1 in X odds.  estimatedWinningTicketsRemaining x averageWinLossChance = estimatedTotalTicketsRemaining
     //it may make sense to refactor this to have estimatedTotalTicketsRemaining be a get method rather than a field, but it may be useful for CustomGame
     private double averageWinLossChance;
@@ -95,6 +101,18 @@ public abstract class ScratcherGame{
 
     public void setStartYear(int startYear) {
         this.startYear = startYear;
+    }
+
+    public void setCreatedDay(int createdDay) {
+        this.createdDay = createdDay;
+    }
+
+    public void setCreatedMonth(int createdMonth) {
+        this.createdMonth = createdMonth;
+    }
+
+    public void setCreatedYear(int createdYear) {
+        this.createdYear = createdYear;
     }
 
     public void setAverageWinLossChance(double averageWinLossChance) {
@@ -201,6 +219,22 @@ public abstract class ScratcherGame{
 
     public LocalDate getStartDate() {
         return LocalDate.of(this.startYear, this.startMonth, this.startDay);
+    }
+
+    public int getCreatedDay() {
+        return createdDay;
+    }
+
+    public int getCreatedMonth() {
+        return createdMonth;
+    }
+
+    public int getCreatedYear() {
+        return createdYear;
+    }
+
+    public LocalDate getCreatedDate() {
+        return LocalDate.of(this.createdYear, this.createdMonth, this.createdDay);
     }
 
     public double getAverageWinLossChance() {

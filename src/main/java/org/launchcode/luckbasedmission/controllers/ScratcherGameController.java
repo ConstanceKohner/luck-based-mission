@@ -15,6 +15,8 @@ import javax.validation.Valid;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by catub on 7/24/2017.
@@ -38,8 +40,37 @@ public class ScratcherGameController {
 
     @RequestMapping(value = "")
     public String homePage (Model model) {
-        model.addAttribute("alloverviewgames", scratcherGameOverviewDao.findAll());
+        Iterable<ScratcherGameSnapshot> literallyallgames = scratcherGameSnapshotDao.findAll();
+        HashMap<Integer, ScratcherGameSnapshot> allgames = new HashMap<>();
+        ScratcherGameSnapshot targetGame;
+        for (ScratcherGameSnapshot game : literallyallgames) {
+            if (allgames.containsKey(game.getGameID())) {
+                targetGame = allgames.get(game.getGameID());
+                //if the game in the HashMap is from an earlier day than (or the same day as) the game from the iterable, then add the new game
+                if (targetGame.getCreatedDate().compareTo(game.getCreatedDate()) <= 0) {
+                    allgames.put(game.getGameID(), game);
+                }
+            } else {
+                //if no game with this ID exists in the hashmap, put it in the hashmap
+                allgames.put(game.getGameID(), game);
+            }
+            //if neither of these is true, continue to the next loop
+        }
+        model.addAttribute("allgames", allgames.values());
         model.addAttribute("title", "All Scratcher Games");
+        return "index";
+    }
+
+    @RequestMapping(value = "/overviews")
+    public String allOverviews (Model model) {
+        //to ensure same sort as index view, refactor once comparators come into play
+        Iterable<ScratcherGameOverview> allOverviews = scratcherGameOverviewDao.findAll();
+        HashMap<Integer, ScratcherGameOverview> allgames = new HashMap<>();
+        for (ScratcherGameOverview game : allOverviews) {
+            allgames.put(game.getGameID(), game);
+        }
+        model.addAttribute("allgames", allgames.values());
+        model.addAttribute("title", "All Scratcher Game Overviews");
         return "index";
     }
 
@@ -76,13 +107,7 @@ public class ScratcherGameController {
         return "individualview";
     }
 
-    //delete later
-    @RequestMapping(value = "add", method = RequestMethod.GET)
-    public String placeholderFunction (Model model) {
-        return "redirect: index";
-    }
-
-    //put data in database, this will be replaced later
+    //put data in database
     @RequestMapping(value="addOverview", method=RequestMethod.GET)
     public String displayOverviewGameForm (Model model) {
         model.addAttribute("title", "Add a New Scratcher Overview");
@@ -97,27 +122,30 @@ public class ScratcherGameController {
             return "addoverviewgame";
         }
         //originally, recalculate odds was run internally, but this caused problems.  it is best to run it before saving each time.
+        scratcherGameOverview.setCreatedDay(scratcherGameOverview.getStartDay());
+        scratcherGameOverview.setCreatedMonth(scratcherGameOverview.getStartMonth());
+        scratcherGameOverview.setCreatedYear(scratcherGameOverview.getStartYear());
         scratcherGameOverview.recalculateOdds();
         scratcherGameOverviewDao.save(scratcherGameOverview);
-        return "redirect:";
+        return "redirect:overviews";
     }
 
     @RequestMapping(value="addSnapshot", method=RequestMethod.GET)
     public String displaySnapshotGameForm (Model model) {
         model.addAttribute("title", "Add a New Daily Snapshot");
-        model.addAttribute(new ScratcherGameSnapshot());
         model.addAttribute("scratcherGameOverviews", scratcherGameOverviewDao.findAll());
+        model.addAttribute(new ScratcherGameSnapshot());
         return "addsnapshotgame";
     }
 
     @RequestMapping(value = "addSnapshot", method = RequestMethod.POST)
-    public String processSnapshotGameForm (@ModelAttribute @Valid ScratcherGameSnapshot scratcherGameSnapshot, Errors errors, @RequestParam int scratcherGameUID, Model model) {
+    public String processSnapshotGameForm (@ModelAttribute @Valid ScratcherGameSnapshot scratcherGameSnapshot, Errors errors, @RequestParam int scratcherGameOverviewUidNumber, Model model) {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add a New Daily Snapshot");
             return "addsnapshotgame";
         }
-        ScratcherGameOverview scratcherGame = scratcherGameOverviewDao.findOne(scratcherGameUID);
+        ScratcherGameOverview scratcherGame = scratcherGameOverviewDao.findOne(scratcherGameOverviewUidNumber);
         scratcherGameSnapshot.setOverviewGame(scratcherGame);
         scratcherGameSnapshot.setName(scratcherGame.getName());
         scratcherGameSnapshot.setGameID(scratcherGame.getGameID());
