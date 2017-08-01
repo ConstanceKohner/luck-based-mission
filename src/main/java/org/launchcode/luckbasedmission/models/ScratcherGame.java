@@ -221,6 +221,7 @@ public abstract class ScratcherGame{
         return LocalDate.of(this.startYear, this.startMonth, this.startDay);
     }
 
+    //TODO: These fields are not being saved properly
     public int getCreatedDay() {
         return createdDay;
     }
@@ -251,6 +252,10 @@ public abstract class ScratcherGame{
 
     public String getEstimatedWinningTicketsFormatted() {
         return integerFormat(this.getEstimatedWinningTicketsRemaining());
+    }
+
+    public String getEstimatedLosingTicketsFormatted() {
+        return integerFormat(this.getEstimatedTotalTicketsRemaining() - this.getEstimatedWinningTicketsRemaining());
     }
 
     public double getEstimatedTotalTicketsRemaining() {

@@ -9,34 +9,26 @@
 <nav th:replace="fragments :: navigation"></nav>
 
 <table th:object="${game}" class="table">
-    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
     <tr><th>Game Name:</th> <th th:text="*{name}"></th></tr>
-    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
     <tr><td>Game Number:</td> <td th:text=" '#' + *{gameID}"></td></tr>
     <tr><td>Ticket Price:</td><td th:text="${game.getTicketPriceFormatted()}"></td></tr>
     <tr><td>Start Date:</td><td th:text="${game.getStartDate()}"></td></tr>
     <tr><td>Average Win Chance</td><td th:text=" '1 in ' + *{averageWinLossChance}"></td></tr>
-    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
-    <tr><td>Expected Return</td><td th:class="${game.getSign()}" th:text="${game.getExpectedReturnFormatted()} + ' per ticket'"></td></tr>
-    <tr><td>As percentage of Ticket Price</td><td th:class="${game.getSign()}" th:text="${game.getReturnPercentageFormatted()} + ' of original ticket price'"></td></tr>
-    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
-    <tr><td>Last Updated:</td><td th:text="${game.getCreatedDate()}"></td></tr>
-</table>
-
-<table class="table">
-    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
-    <tr><th>Prize Level</th><th>Number of Prizes</th></tr>
-    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
-    <tr th:each="display : ${displayMode}">
-        <td th:each="string : ${display}" th:text="${string}" class="right-align"></td>
-    </tr>
-    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
-
+    <tr><td>Expected Return</td><td><span th:class="${game.getSign()}" th:text="${game.getExpectedReturnFormatted()}"></span><span> per ticket</span></td></tr>
+    <tr><td>As percentage of Ticket Price</td><td><span th:class="${game.getSign()}" th:text="${game.getReturnPercentageFormatted()}"></span> <span> of original ticket price</span></td></tr>
+    <tr><td> </td><td> </td></tr>
+    <tr><th>Detailed Expected Return</th><th><span th:class="${game.getSign()}" th:text="${game.getExpectedReturn()}"></span><span> dollars per ticket</span></th></tr>
     <tr><td>Winning Tickets Remaining</td><td th:text="${game.getEstimatedWinningTicketsFormatted()}"></td></tr>
+    <tr><td>Losing Tickets Remaining</td><td th:text="${game.getEstimatedLosingTicketsFormatted()}"></td></tr>
     <tr><td>Estimated Tickets Remaining</td><td th:text="${game.getEstimatedTotalTicketsRemainingFormatted()}"></td></tr>
     <tr><td>Prize Money Remaining</td><td th:text="${game.getEstimatedTotalPrizeMoneyRemainingFormatted()}"></td></tr>
-    <tr><td>-----------------------------------</td><td>-----------------------------------</td></tr>
-    <tr><td>Detailed Expected Return</td><td th:class="${sign}" th:text="${game.getExpectedReturn()} + ' dollars per ticket'"></td></tr>
+    <tr><td> </td><td> </td></tr>
+    <tr><th>Prize Level</th><th>Number of Prizes</th></tr>
+    <tr th:each="display : ${displayMode}">
+        <td th:each="string : ${display}" th:text="${string}"></td>
+    </tr>
+    <tr><td> </td><td> </td></tr>
+    <tr><td>Last Updated:</td><td th:text="${game.getCreatedDate()}"></td></tr>
 </table>
 
 </body>
