@@ -58,9 +58,12 @@ public abstract class ScratcherGame{
     //the sum of dollarsToWin * numberOfTickets
     private double estimatedTotalPrizeMoneyRemaining;
 
+    /*
     //same as estimatedTotalPrizesRemaining but taken directly from the site, used for unit testing only
     // estimatedTotalPrizesRemaining is more important because it can be used for CustomGame, and this one cannot
+    //implement later
     private double totalPrizeMoneyRemaining;
+    */
 
     //this is just estimatedTotalPrizeMoneyRemaining divided by estimatedTotalTicketsRemaining minus ticketPrice
     //this is the most important part of the Object, short of the identifiers
@@ -68,6 +71,22 @@ public abstract class ScratcherGame{
 
     //empty constructor
     public ScratcherGame() {
+    }
+
+    public ScratcherGame(int gameID, String name, double ticketPrice, int startMonth, int startDay, int startYear,
+                         int createdMonth, int createdDay, int createdYear, double averageWinLossChance, String allPrizes) {
+        this();
+        this.gameID = gameID;
+        this.name = name;
+        this.ticketPrice = ticketPrice;
+        this.startMonth = startMonth;
+        this.startDay = startDay;
+        this.startYear = startYear;
+        this.createdMonth = createdMonth;
+        this.createdDay = createdDay;
+        this.createdYear = createdYear;
+        this.averageWinLossChance = averageWinLossChance;
+        this.allPrizes = allPrizes;
     }
 
     //setters start here, getters are below
@@ -84,31 +103,25 @@ public abstract class ScratcherGame{
         this.ticketPrice = ticketPrice;
     }
 
-    /*public void setStartDate(String startDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-        formatter = formatter.withLocale( Locale.US );
-        LocalDate localDate = LocalDate.parse(startDate, formatter);
-        this.startDate = localDate;
-    }*/
+    //mySQL did not like storing a Local Date, storing as individual ints
+    public void setStartMonth(int startMonth) {
+        this.startMonth = startMonth;
+    }
 
     public void setStartDay(int startDay) {
         this.startDay = startDay;
-    }
-
-    public void setStartMonth(int startMonth) {
-        this.startMonth = startMonth;
     }
 
     public void setStartYear(int startYear) {
         this.startYear = startYear;
     }
 
-    public void setCreatedDay(int createdDay) {
-        this.createdDay = createdDay;
-    }
-
     public void setCreatedMonth(int createdMonth) {
         this.createdMonth = createdMonth;
+    }
+
+    public void setCreatedDay(int createdDay) {
+        this.createdDay = createdDay;
     }
 
     public void setCreatedYear(int createdYear) {
@@ -123,10 +136,6 @@ public abstract class ScratcherGame{
     public void setAllPrizes(String allPrizes) {
         allPrizes = allPrizes.trim();
         this.allPrizes = allPrizes;
-    }
-
-    public void setTotalPrizeMoneyRemaining(double totalPrizeMoneyRemaining) {
-        this.totalPrizeMoneyRemaining = totalPrizeMoneyRemaining;
     }
 
     public void recalculateOdds() {
@@ -271,14 +280,6 @@ public abstract class ScratcherGame{
 
     public String getEstimatedTotalPrizeMoneyRemainingFormatted() {
         return dollarFormat(this.getEstimatedTotalPrizeMoneyRemaining());
-    }
-
-    public double getTotalPrizeMoneyRemaining() {
-        return totalPrizeMoneyRemaining;
-    }
-
-    public String getTotalPrizeMoneyRemainingFormatted() {
-        return dollarFormat(this.getTotalPrizeMoneyRemaining());
     }
 
     public double getExpectedReturn() {
