@@ -208,7 +208,7 @@ public class ScratcherGameController {
                 //i > 5 removes the headings
                 //i % 3 != 2; removes the last column, for Overview
                 //i % 3 != 1; removes the middle column, for Snapshot
-                if (i > 5 && i % 3 != 2) {
+                if (i > 5 && i % 3 != 1) {
                     if (table[i].equalsIgnoreCase("TICKET")) {
                         CSV.append(prefix + ticketPrice);
                         prefix = ",";
@@ -221,7 +221,7 @@ public class ScratcherGameController {
             }
             String allPrizes = CSV.toString();
 
-            //this is the overview version, to be used with i % 3 != 2
+            /*this is the overview version, to be used with i % 3 != 2
             ScratcherGameOverview scratcherGameOverview = new ScratcherGameOverview();
             scratcherGameOverview.setGameID(gameID);
             scratcherGameOverview.setName(name);
@@ -235,9 +235,32 @@ public class ScratcherGameController {
             scratcherGameOverview.setAverageWinLossChance(averageWinLossChance);
             scratcherGameOverview.setAllPrizes(allPrizes);
             scratcherGameOverview.recalculateOdds();
-            scratcherGameDao.save(scratcherGameOverview);
+            scratcherGameDao.save(scratcherGameOverview);*/
 
-            //TODO this is the snapshot version, to be used with i % 3 != 1
+            //this is the Snapshot version, to be used with i % 3 != 1
+
+            ScratcherGameSnapshot scratcherGameSnapshot = new ScratcherGameSnapshot();
+
+            Iterable <ScratcherGameOverview> overviews = scratcherGameOverviewDao.findAll();
+            for (ScratcherGameOverview overview : overviews) {
+                if (overview.getGameID() == gameID) {
+                    scratcherGameSnapshot.setOverviewGame(overview);
+                    break;
+                }
+            }
+            scratcherGameSnapshot.setGameID(gameID);
+            scratcherGameSnapshot.setName(name);
+            scratcherGameSnapshot.setTicketPrice(ticketPrice);
+            scratcherGameSnapshot.setStartMonth(startMonth);
+            scratcherGameSnapshot.setStartDay(startDay);
+            scratcherGameSnapshot.setStartYear(startYear);
+            scratcherGameSnapshot.setCreatedMonth(createdMonth);
+            scratcherGameSnapshot.setCreatedDay(createdDay);
+            scratcherGameSnapshot.setCreatedYear(createdYear);
+            scratcherGameSnapshot.setAverageWinLossChance(averageWinLossChance);
+            scratcherGameSnapshot.setAllPrizes(allPrizes);
+            scratcherGameSnapshot.recalculateOdds();
+            scratcherGameDao.save(scratcherGameSnapshot);
         }
             return "redirect:";
     }
