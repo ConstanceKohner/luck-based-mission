@@ -7,6 +7,7 @@ import org.launchcode.luckbasedmission.models.ScratcherGame;
 import org.launchcode.luckbasedmission.models.ScratcherGameCustom;
 import org.launchcode.luckbasedmission.models.ScratcherGameOverview;
 import org.launchcode.luckbasedmission.models.ScratcherGameSnapshot;
+import org.launchcode.luckbasedmission.models.comparators.ReturnComparator;
 import org.launchcode.luckbasedmission.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,23 +43,30 @@ public class ScratcherGameController {
 
     @RequestMapping(value = "")
     public String homePage (Model model) {
-        Iterable<ScratcherGameSnapshot> literallyallgames = scratcherGameSnapshotDao.findAll();
-        HashMap<Integer, ScratcherGameSnapshot> allgames = new HashMap<>();
+        Iterable<ScratcherGameSnapshot> literallyAllGames = scratcherGameSnapshotDao.findAll();
+        HashMap<Integer, ScratcherGameSnapshot> mapAllGames = new HashMap<>();
         ScratcherGameSnapshot targetGame;
-        for (ScratcherGameSnapshot game : literallyallgames) {
-            if (allgames.containsKey(game.getGameID())) {
-                targetGame = allgames.get(game.getGameID());
+        for (ScratcherGameSnapshot game : literallyAllGames) {
+            if (mapAllGames.containsKey(game.getGameID())) {
+                targetGame = mapAllGames.get(game.getGameID());
                 //if the game in the HashMap is from an earlier day than (or the same day as) the game from the iterable, then add the new game
                 if (targetGame.getCreatedDate().compareTo(game.getCreatedDate()) <= 0) {
-                    allgames.put(game.getGameID(), game);
+                    mapAllGames.put(game.getGameID(), game);
                 }
             } else {
-                //if no game with this ID exists in the hashmap, put it in the hashmap
-                allgames.put(game.getGameID(), game);
+                //if no game with this ID exists in the HashMap, put it in the HashMap
+                mapAllGames.put(game.getGameID(), game);
             }
             //if neither of these is true, continue to the next loop
         }
-        model.addAttribute("allgames", allgames.values());
+
+        ArrayList<ScratcherGameSnapshot> allGames = new ArrayList<>();
+        allGames.addAll(mapAllGames.values());
+        ReturnComparator comparator = new ReturnComparator();
+
+        allGames.sort(comparator);
+
+        model.addAttribute("allgames", allGames);
         model.addAttribute("title", "All Scratcher Games");
         return "index";
     }
