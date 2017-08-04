@@ -1,5 +1,8 @@
 package org.launchcode.luckbasedmission.controllers;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.launchcode.luckbasedmission.models.ScratcherGame;
 import org.launchcode.luckbasedmission.models.ScratcherGameCustom;
 import org.launchcode.luckbasedmission.models.ScratcherGameOverview;
@@ -12,11 +15,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * Created by catub on 7/24/2017.
@@ -157,6 +159,87 @@ public class ScratcherGameController {
         scratcherGameSnapshot.recalculateOdds();
         scratcherGameSnapshotDao.save(scratcherGameSnapshot);
         return "redirect:";
+    }
+
+    @RequestMapping(value = "load", method = RequestMethod.GET)
+    public String requestDailyLoad(Model model) {
+        return "loaddatabase";
+    }
+
+    @RequestMapping(value = "load", method = RequestMethod.POST)
+    public String processDailyLoad (Model model) throws IOException {
+        List<Integer> currentGameList = Arrays.asList(771,935,21,23,48,54,63,71,73,78,92,93,94,97,98,99,
+                101,102,104,107,109,111,113,114,116,117,119,120,122,126,127,134,135,136,137,138,139,141,142,
+                143,144,145,146,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,170);
+        for (Integer gameID : currentGameList) {
+            //go to the specified url
+            String url = "http://www.molottery.com/scratchers.do?method=singlegame&game=" + gameID.toString();
+            //get the document
+            Document doc = Jsoup.connect(url).get();
+            //take the first half of the h1 element, which should be the game name, all caps
+            String name = ((doc.select("h1").first()).text()).split(" - ")[0];
+            //get all of the dd elements
+            Elements allDD = doc.select("dd");
+            List<String> listDD = allDD.eachText();
+            //not resilient, relies on there being a space between $ and ticketPrice
+            String dollarAmount = (listDD.get(0)).split(" ")[1];
+            double ticketPrice = Double.parseDouble(dollarAmount);
+            //gets date numbers
+            String fullDate = (listDD.get(1)).split(" ")[0];
+            //save them individually
+            int startMonth = Integer.parseInt(fullDate.split("-")[1]);
+            int startDay = Integer.parseInt(fullDate.split("-")[2]);
+            int startYear = Integer.parseInt(fullDate.split("-")[0]);
+            //get the current date and save those, too
+            LocalDate today = LocalDate.now();
+            int createdMonth = today.getMonth().getValue();
+            int createdDay = today.getDayOfMonth();
+            int createdYear = today.getYear();
+            //first, take all the words before the comma in average chances.  then, take the third word, which should be the odds.
+            String chance = (((doc.select("dd").last()).text()).split(",")[0]).split(" ")[2];
+            //turn into double
+            double averageWinLossChance = Double.parseDouble(chance);
+            //get the odds table
+            String[] table = ((doc.select("td > div > table").first()).text()).split(" ");
+            StringBuffer CSV = new StringBuffer();
+            //on the first pass, do not put a comma in front on the value. subsequently, add comma prefixes
+            String prefix = "";
+            for (int i = 0; i < table.length; i++) {
+                //i > 5 removes the headings
+                //i % 3 != 2; removes the last column, for Overview
+                //i % 3 != 1; removes the middle column, for Snapshot
+                if (i > 5 && i % 3 != 2) {
+                    if (table[i].equalsIgnoreCase("TICKET")) {
+                        CSV.append(prefix + ticketPrice);
+                        prefix = ",";
+                    } else {
+                        //do not add dollar signs or commas
+                        CSV.append(prefix + table[i].replaceAll("[$,]", ""));
+                        prefix = ",";
+                    }
+                }
+            }
+            String allPrizes = CSV.toString();
+
+            //this is the overview version, to be used with i % 3 != 2
+            ScratcherGameOverview scratcherGameOverview = new ScratcherGameOverview();
+            scratcherGameOverview.setGameID(gameID);
+            scratcherGameOverview.setName(name);
+            scratcherGameOverview.setTicketPrice(ticketPrice);
+            scratcherGameOverview.setStartMonth(startMonth);
+            scratcherGameOverview.setStartDay(startDay);
+            scratcherGameOverview.setStartYear(startYear);
+            scratcherGameOverview.setCreatedMonth(createdMonth);
+            scratcherGameOverview.setCreatedDay(createdDay);
+            scratcherGameOverview.setCreatedYear(createdYear);
+            scratcherGameOverview.setAverageWinLossChance(averageWinLossChance);
+            scratcherGameOverview.setAllPrizes(allPrizes);
+            scratcherGameOverview.recalculateOdds();
+            scratcherGameDao.save(scratcherGameOverview);
+
+            //TODO this is the snapshot version, to be used with i % 3 != 1
+        }
+            return "redirect:";
     }
 /*
     //TODO "simulate odds based on this game" takes user to a form for a CustomGame with starting values equal to the game they chose
