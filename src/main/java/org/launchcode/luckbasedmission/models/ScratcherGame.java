@@ -73,6 +73,7 @@ public abstract class ScratcherGame{
     public ScratcherGame() {
     }
 
+    /*Not needed
     public ScratcherGame(int gameID, String name, double ticketPrice, int startMonth, int startDay, int startYear,
                          int createdMonth, int createdDay, int createdYear, double averageWinLossChance, String allPrizes) {
         this();
@@ -87,7 +88,7 @@ public abstract class ScratcherGame{
         this.createdYear = createdYear;
         this.averageWinLossChance = averageWinLossChance;
         this.allPrizes = allPrizes;
-    }
+    }*/
 
     //setters start here, getters are below
 
