@@ -13,15 +13,15 @@
 <table class="table">
 
     <tr>
-        <th>Start Date</th>
-        <th>Game Name</th>
-        <th>Number</th>
-        <th>Ticket Price</th>
-        <th>Expected Return</th>
-        <th>As Percentage of Ticket Price</th>
+        <th><a th:href="@{/(sortfield=date, sortdir=desc)}">Start Date</a></th>
+        <th><a th:href="@{/(sortfield=name, sortdir=asc)}">Game Name</a></th>
+        <th><a th:href="@{/(sortfield=number, sortdir=asc)}">Number</a></th>
+        <th><a th:href="@{/(sortfield=price, sortdir=asc)}">Ticket Price</a></th>
+        <th><a th:href="@{/(sortfield=return, sortdir=desc)}">Expected Return</a></th>
+        <th><a th:href="@{/(sortfield=percent, sortdir=desc)}">As Percentage of Ticket Price</a></th>
     </tr>
 
-    <tr th:each="game : ${allgames}">
+    <tr th:fragment="results" th:each="game : ${allgames}">
         <td><p th:text="${game.getStartDate()}">Default Text</p></td>
         <td><a th:href="'/' + ${game.uidNumber}" th:text="${game.name}">Default Text</a></td>
         <td><p th:text="'#' + ${game.gameID}">Default Text</p></td>
