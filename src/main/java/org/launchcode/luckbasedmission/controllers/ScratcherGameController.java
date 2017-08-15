@@ -74,7 +74,7 @@ public class ScratcherGameController {
             allGames.sort(comparator);
             model.addAttribute("allgames", allGames);
             model.addAttribute("title", "All Scratcher Games");
-            return "index";
+            return "dateindex";
         } else if (sortfield.equals("date") && sortdir.equals("asc")) {
             DateComparator comparator = new DateComparator();
             allGames.sort(Collections.reverseOrder(comparator));
@@ -86,7 +86,7 @@ public class ScratcherGameController {
             allGames.sort(comparator);
             model.addAttribute("allgames", allGames);
             model.addAttribute("title", "All Scratcher Games");
-            return "index";
+            return "nameindex";
         } else if (sortfield.equals("name") && sortdir.equals("desc")) {
             NameComparator comparator = new NameComparator();
             allGames.sort(Collections.reverseOrder(comparator));
@@ -98,7 +98,7 @@ public class ScratcherGameController {
             allGames.sort(comparator);
             model.addAttribute("allgames", allGames);
             model.addAttribute("title", "All Scratcher Games");
-            return "index";
+            return "numberindex";
         } else if (sortfield.equals("number") && sortdir.equals("desc")) {
             NumberComparator comparator = new NumberComparator();
             allGames.sort(Collections.reverseOrder(comparator));
@@ -110,7 +110,7 @@ public class ScratcherGameController {
             allGames.sort(comparator);
             model.addAttribute("allgames", allGames);
             model.addAttribute("title", "All Scratcher Games");
-            return "index";
+            return "priceindex";
         } else if (sortfield.equals("price") && sortdir.equals("desc")) {
             PriceComparator comparator = new PriceComparator();
             allGames.sort(Collections.reverseOrder(comparator));
@@ -122,7 +122,7 @@ public class ScratcherGameController {
             allGames.sort(comparator);
             model.addAttribute("allgames", allGames);
             model.addAttribute("title", "All Scratcher Games");
-            return "index";
+            return "returnindex";
         } else if (sortfield.equals("return") && sortdir.equals("asc")) {
             ReturnComparator comparator = new ReturnComparator();
             allGames.sort(Collections.reverseOrder(comparator));
@@ -134,7 +134,7 @@ public class ScratcherGameController {
             allGames.sort(comparator);
             model.addAttribute("allgames", allGames);
             model.addAttribute("title", "All Scratcher Games");
-            return "index";
+            return "returnpercentageindex";
         } else if (sortfield.equals("percentage") && sortdir.equals("asc")) {
             ReturnPercentageComparator comparator = new ReturnPercentageComparator();
             allGames.sort(Collections.reverseOrder(comparator));
