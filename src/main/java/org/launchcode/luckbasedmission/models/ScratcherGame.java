@@ -147,14 +147,12 @@ public abstract class ScratcherGame{
         ArrayList <Double> ticketQuantities = new ArrayList<>();
 
         //convert allPrizes into a iterable
-        //TODO: error message if there are no commas
         String[] allPrizesArray = allPrizes.split(",");
 
         //iterate!
         for (int i = 0; i < (allPrizesArray.length); i++) {
             //if i is an even number, it is a ticket value
             if (i % 2 == 0) {
-                //TODO: account for the possibility that the first string is "TICKET" or some variation thereof
                 //this takes the string at this index, parses it as an integer, and adds it to the ticketValues arraylist
                 ticketValues.add(Double.parseDouble(allPrizesArray[i]));
             }
@@ -166,7 +164,6 @@ public abstract class ScratcherGame{
         }
 
         //now, each number should be in the appropriate list at the corresponding index
-        //TODO: error message if the two lists are not the same length
         for (int i = 0; i < (ticketQuantities.size()); i++) {
             numberOfWinningTickets += ticketQuantities.get(i);
             totalPrizeMoney += (ticketQuantities.get(i) * ticketValues.get(i));
@@ -288,7 +285,7 @@ public abstract class ScratcherGame{
     }
 
     public double getReturnPercentage() {
-        return (this.getExpectedReturn() / this.ticketPrice);
+        return (this.expectedReturn / this.ticketPrice);
     }
 
     public String getReturnPercentageFormatted() {
@@ -298,7 +295,6 @@ public abstract class ScratcherGame{
     }
 
     //tells template whether return is negative or positive for css
-    //TODO: create additional levels to color code as a gradient of best to worst
     public String getSign() {
         if (this.getExpectedReturn() < 0) {
             return "negative";

@@ -7,9 +7,7 @@ import org.launchcode.luckbasedmission.models.ScratcherGame;
 import org.launchcode.luckbasedmission.models.ScratcherGameCustom;
 import org.launchcode.luckbasedmission.models.ScratcherGameOverview;
 import org.launchcode.luckbasedmission.models.ScratcherGameSnapshot;
-import org.launchcode.luckbasedmission.models.comparators.DateComparator;
-import org.launchcode.luckbasedmission.models.comparators.NameComparator;
-import org.launchcode.luckbasedmission.models.comparators.ReturnComparator;
+import org.launchcode.luckbasedmission.models.comparators.*;
 import org.launchcode.luckbasedmission.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,20 +41,20 @@ public class ScratcherGameController {
     @Autowired
     private ScratcherGameCustomDao scratcherGameCustomDao;
 
-    /*SortField can be
-    SortDir, asc or desc.
-     */
-
+    //display index, sorted per request params
     @RequestMapping(value = "")
     public String index (Model model, @RequestParam(name="sortfield", defaultValue = "date") String sortfield,
                          @RequestParam(name="sortdir", defaultValue = "desc") String sortdir) {
+        //
         Iterable<ScratcherGameSnapshot> literallyAllGames = scratcherGameSnapshotDao.findAll();
         HashMap<Integer, ScratcherGameSnapshot> mapAllGames = new HashMap<>();
         ScratcherGameSnapshot targetGame;
         for (ScratcherGameSnapshot game : literallyAllGames) {
+            //iterate through all games
             if (mapAllGames.containsKey(game.getGameID())) {
+                //if the game in the HashMap is from an earlier day than (or the same day as) the game from the iterable
+                //then add the new game, replacing the old game
                 targetGame = mapAllGames.get(game.getGameID());
-                //if the game in the HashMap is from an earlier day than (or the same day as) the game from the iterable, then add the new game
                 if (targetGame.getCreatedDate().compareTo(game.getCreatedDate()) <= 0) {
                     mapAllGames.put(game.getGameID(), game);
                 }
@@ -64,101 +62,93 @@ public class ScratcherGameController {
                 //if no game with this ID exists in the HashMap, put it in the HashMap
                 mapAllGames.put(game.getGameID(), game);
             }
-            //if neither of these is true, continue to the next loop
         }
-
         //put all games from the map into a list so they can be sorted
         ArrayList<ScratcherGameSnapshot> allGames = new ArrayList<>();
         allGames.addAll(mapAllGames.values());
 
+        //sort based on request params
+        //TODO: refactor to account for sortfield being set but sortdir not set
         if (sortfield.equals("date") && sortdir.equals("desc")) {
             DateComparator comparator = new DateComparator();
             allGames.sort(comparator);
             model.addAttribute("allgames", allGames);
             model.addAttribute("title", "All Scratcher Games");
             return "index";
+        } else if (sortfield.equals("date") && sortdir.equals("asc")) {
+            DateComparator comparator = new DateComparator();
+            allGames.sort(Collections.reverseOrder(comparator));
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
+        } else if (sortfield.equals("name") && sortdir.equals("asc")) {
+            NameComparator comparator = new NameComparator();
+            allGames.sort(comparator);
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
+        } else if (sortfield.equals("name") && sortdir.equals("desc")) {
+            NameComparator comparator = new NameComparator();
+            allGames.sort(Collections.reverseOrder(comparator));
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
+        } else if (sortfield.equals("number") && sortdir.equals("asc")) {
+            NumberComparator comparator = new NumberComparator();
+            allGames.sort(comparator);
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
+        } else if (sortfield.equals("number") && sortdir.equals("desc")) {
+            NumberComparator comparator = new NumberComparator();
+            allGames.sort(Collections.reverseOrder(comparator));
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
+        } else if (sortfield.equals("price") && sortdir.equals("asc")) {
+            PriceComparator comparator = new PriceComparator();
+            allGames.sort(comparator);
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
+        } else if (sortfield.equals("price") && sortdir.equals("desc")) {
+            PriceComparator comparator = new PriceComparator();
+            allGames.sort(Collections.reverseOrder(comparator));
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
+        } else if (sortfield.equals("return") && sortdir.equals("desc")) {
+            ReturnComparator comparator = new ReturnComparator();
+            allGames.sort(comparator);
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
+        } else if (sortfield.equals("return") && sortdir.equals("asc")) {
+            ReturnComparator comparator = new ReturnComparator();
+            allGames.sort(Collections.reverseOrder(comparator));
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
+        } else if (sortfield.equals("percentage") && sortdir.equals("desc")) {
+            ReturnPercentageComparator comparator = new ReturnPercentageComparator();
+            allGames.sort(comparator);
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
+        } else if (sortfield.equals("percentage") && sortdir.equals("asc")) {
+            ReturnPercentageComparator comparator = new ReturnPercentageComparator();
+            allGames.sort(Collections.reverseOrder(comparator));
+            model.addAttribute("allgames", allGames);
+            model.addAttribute("title", "All Scratcher Games");
+            return "index";
         }
-        //TODO: remainder of conditional branches
+        //if the request params don't match the options above, just use the default sort
         DateComparator comparator = new DateComparator();
         allGames.sort(comparator);
         model.addAttribute("allgames", allGames);
         model.addAttribute("title", "All Scratcher Games");
         return "index";
     }
-    /*
-    @RequestMapping(value = "")
-    public String searchIndex (Model model, @RequestParam(required=false, name="sortfield") String sortfield, @RequestParam(required=false, name="sortdir") String sortdir) {
-        Iterable<ScratcherGameSnapshot> literallyAllGames = scratcherGameSnapshotDao.findAll();
-        HashMap<Integer, ScratcherGameSnapshot> mapAllGames = new HashMap<>();
-        ScratcherGameSnapshot targetGame;
-        for (ScratcherGameSnapshot game : literallyAllGames) {
-            if (mapAllGames.containsKey(game.getGameID())) {
-                targetGame = mapAllGames.get(game.getGameID());
-                //if the game in the HashMap is from an earlier day than (or the same day as) the game from the iterable, then add the new game
-                if (targetGame.getCreatedDate().compareTo(game.getCreatedDate()) <= 0) {
-                    mapAllGames.put(game.getGameID(), game);
-                }
-            } else {
-                //if no game with this ID exists in the HashMap, put it in the HashMap
-                mapAllGames.put(game.getGameID(), game);
-            }
-            //if neither of these is true, continue to the next loop
-        }
-
-        //put all games from the map into a list so they can be sorted
-        ArrayList<ScratcherGameSnapshot> allGames = new ArrayList<>();
-        allGames.addAll(mapAllGames.values());
-        if (sortfield.equals("date")) {
-            DateComparator comparator = new DateComparator();
-            if (sortdir.equals("asc")) {
-                allGames.sort(Collections.reverseOrder(comparator));
-                model.addAttribute("allgames", allGames);
-                model.addAttribute("title", "All Scratcher Games");
-                //return specialized version
-                return "index";
-            } else {
-                allGames.sort(comparator);
-            }
-        } else if (sortfield.equals("name")) {
-            //name comparator, as above
-            DateComparator comparator = new DateComparator();
-            allGames.sort(comparator);
-        } else if (sortfield.equals("number")) {
-            //number comparator
-            DateComparator comparator = new DateComparator();
-            allGames.sort(comparator);
-        } else if (sortfield.equals("price")) {
-            //price comparator
-            DateComparator comparator = new DateComparator();
-            allGames.sort(comparator);
-        } else if (sortfield.equals("return")) {
-            ReturnComparator comparator = new ReturnComparator();
-            if (sortdir.equals("asc")) {
-                allGames.sort(Collections.reverseOrder(comparator));
-                model.addAttribute("allgames", allGames);
-                model.addAttribute("title", "All Scratcher Games");
-                //return specialized version
-                return "index";
-            } else {
-                allGames.sort(comparator);
-            }
-        } else if (sortfield.equals("percent")) {
-            //percentage comparator
-            DateComparator comparator = new DateComparator();
-            allGames.sort(comparator);
-        } else {
-        DateComparator comparator = new DateComparator();
-        allGames.sort(comparator);
-        }
-
-        DateComparator comparator = new DateComparator();
-        allGames.sort(comparator);
-
-        //send results to template
-        model.addAttribute("allgames", allGames);
-        model.addAttribute("title", "All Scratcher Games");
-        return "index";
-    }*/
 
     @RequestMapping(value = "/overviews")
     public String allOverviews (Model model) {
@@ -173,7 +163,7 @@ public class ScratcherGameController {
         return "index";
     }
 
-    //TODO display specific view for each game
+    //display specific view for each game
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String individualView (Model model, @PathVariable int id) {
         ScratcherGame scratcherGame = scratcherGameDao.findOne(id);
@@ -181,7 +171,6 @@ public class ScratcherGameController {
         model.addAttribute("title", scratcherGame.getName());
 
         //convert allPrizes into display mode
-        //TODO: control for potential length issues
         ArrayList<ArrayList<String>> displayMode = new ArrayList<>();
         String[] allPrizesArray = (scratcherGame.getAllPrizes()).split(",");
         for (int i = 0; i < (allPrizesArray.length); i = i+2) {

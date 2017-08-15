@@ -18,7 +18,7 @@
         <th><a th:href="@{/(sortfield=number, sortdir=asc)}">Number</a></th>
         <th><a th:href="@{/(sortfield=price, sortdir=asc)}">Ticket Price</a></th>
         <th><a th:href="@{/(sortfield=return, sortdir=desc)}">Expected Return</a></th>
-        <th><a th:href="@{/(sortfield=percent, sortdir=desc)}">As Percentage of Ticket Price</a></th>
+        <th><a th:href="@{/(sortfield=percentage, sortdir=desc)}">As Percentage of Ticket Price</a></th>
     </tr>
 
     <tr th:fragment="results" th:each="game : ${allgames}">

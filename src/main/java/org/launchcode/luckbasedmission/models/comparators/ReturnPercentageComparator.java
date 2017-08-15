@@ -7,7 +7,7 @@ import java.util.Comparator;
 /**
  * Created by catub on 8/13/2017.
  */
-public class PercentageComparator implements Comparator<ScratcherGame> {
+public class ReturnPercentageComparator implements Comparator<ScratcherGame> {
     @Override
     public int compare(ScratcherGame o1, ScratcherGame o2) {
         return Double.compare(o2.getReturnPercentage(), o1.getReturnPercentage());
