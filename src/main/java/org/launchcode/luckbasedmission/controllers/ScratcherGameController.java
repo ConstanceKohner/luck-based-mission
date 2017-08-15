@@ -68,79 +68,91 @@ public class ScratcherGameController {
         allGames.addAll(mapAllGames.values());
 
         //sort based on request params
-        //TODO: refactor to account for sortfield being set but sortdir not set
-        if (sortfield.equals("date") && sortdir.equals("desc")) {
-            DateComparator comparator = new DateComparator();
-            allGames.sort(comparator);
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "dateindex";
-        } else if (sortfield.equals("date") && sortdir.equals("asc")) {
-            DateComparator comparator = new DateComparator();
-            allGames.sort(Collections.reverseOrder(comparator));
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "index";
-        } else if (sortfield.equals("name") && sortdir.equals("asc")) {
-            NameComparator comparator = new NameComparator();
-            allGames.sort(comparator);
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "nameindex";
-        } else if (sortfield.equals("name") && sortdir.equals("desc")) {
-            NameComparator comparator = new NameComparator();
-            allGames.sort(Collections.reverseOrder(comparator));
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "index";
-        } else if (sortfield.equals("number") && sortdir.equals("asc")) {
-            NumberComparator comparator = new NumberComparator();
-            allGames.sort(comparator);
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "numberindex";
-        } else if (sortfield.equals("number") && sortdir.equals("desc")) {
-            NumberComparator comparator = new NumberComparator();
-            allGames.sort(Collections.reverseOrder(comparator));
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "index";
-        } else if (sortfield.equals("price") && sortdir.equals("asc")) {
-            PriceComparator comparator = new PriceComparator();
-            allGames.sort(comparator);
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "priceindex";
-        } else if (sortfield.equals("price") && sortdir.equals("desc")) {
-            PriceComparator comparator = new PriceComparator();
-            allGames.sort(Collections.reverseOrder(comparator));
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "index";
-        } else if (sortfield.equals("return") && sortdir.equals("desc")) {
-            ReturnComparator comparator = new ReturnComparator();
-            allGames.sort(comparator);
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "returnindex";
-        } else if (sortfield.equals("return") && sortdir.equals("asc")) {
-            ReturnComparator comparator = new ReturnComparator();
-            allGames.sort(Collections.reverseOrder(comparator));
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "index";
-        } else if (sortfield.equals("percentage") && sortdir.equals("desc")) {
-            ReturnPercentageComparator comparator = new ReturnPercentageComparator();
-            allGames.sort(comparator);
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "returnpercentageindex";
-        } else if (sortfield.equals("percentage") && sortdir.equals("asc")) {
-            ReturnPercentageComparator comparator = new ReturnPercentageComparator();
-            allGames.sort(Collections.reverseOrder(comparator));
-            model.addAttribute("allgames", allGames);
-            model.addAttribute("title", "All Scratcher Games");
-            return "index";
+        //nested in case sortfield is specified but sortdir is not (or is set incorrectly); should not be possible if clicking app links but possible with user error
+        if (sortfield.equals("date")) {
+            if (sortdir.equals("desc")) {
+                DateComparator comparator = new DateComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "dateindex";
+            } else {
+                DateComparator comparator = new DateComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "index";
+            }
+        } else if (sortfield.equals("name")) {
+            if (sortdir.equals("asc")) {
+                NameComparator comparator = new NameComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "nameindex";
+            } else {
+                NameComparator comparator = new NameComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "index";
+            }
+        } else if (sortfield.equals("number")) {
+            if (sortdir.equals("asc")) {
+                NumberComparator comparator = new NumberComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "numberindex";
+            } else {
+                NumberComparator comparator = new NumberComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "index";
+            }
+        } else if (sortfield.equals("price")) {
+            if (sortdir.equals("asc")) {
+                PriceComparator comparator = new PriceComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "priceindex";
+            } else {
+                PriceComparator comparator = new PriceComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "index";
+            }
+        } else if (sortfield.equals("return")) {
+            if (sortdir.equals("desc")) {
+                ReturnComparator comparator = new ReturnComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "returnindex";
+            } else {
+                ReturnComparator comparator = new ReturnComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "index";
+            }
+        } else if (sortfield.equals("percentage")) {
+            if (sortdir.equals("desc")) {
+                ReturnPercentageComparator comparator = new ReturnPercentageComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "returnpercentageindex";
+            } else {
+                ReturnPercentageComparator comparator = new ReturnPercentageComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games");
+                return "index";
+            }
         }
         //if the request params don't match the options above, just use the default sort
         DateComparator comparator = new DateComparator();
