@@ -207,7 +207,8 @@ public class ScratcherGameController {
         return "individualview";
     }
 
-    //put data in database
+    /*
+    //put data in database manually
     @RequestMapping(value="addOverview", method=RequestMethod.GET)
     public String displayOverviewGameForm (Model model) {
         model.addAttribute("title", "Add a New Scratcher Overview");
@@ -258,7 +259,9 @@ public class ScratcherGameController {
         scratcherGameSnapshotDao.save(scratcherGameSnapshot);
         return "redirect:";
     }
+    */
 
+    //load the database automatically
     @RequestMapping(value = "load", method = RequestMethod.GET)
     public String requestDailyLoad(Model model) {
         return "loaddatabase";
@@ -364,7 +367,7 @@ public class ScratcherGameController {
     }
 /*
     //TODO "simulate odds based on this game" takes user to a form for a CustomGame with starting values equal to the game they chose
-    @RequestMapping(value="addcustom", method=RequestMethod.GET)
+    @RequestMapping(value="addCustom", method=RequestMethod.GET)
     public String displayCustomGameForm (Model model) {
         model.addAttribute("title", "Customize Scratcher Game");
         model.addAttribute(new ScratcherGameCustom());
@@ -372,7 +375,7 @@ public class ScratcherGameController {
         return "addcustomgame";
     }
 
-    @RequestMapping(value="addcustom", method=RequestMethod.POST)
+    @RequestMapping(value="addCustom", method=RequestMethod.POST)
     //public String processCustomGameForm (@ModelAttribute @Valid ScratcherGameCustom scratcherGameCustom, Errors errors, @RequestParam int originalGameId, Model model) {
     public String processCustomGameForm (@ModelAttribute @Valid ScratcherGameCustom scratcherGameCustom, Errors errors, Model model) {
         if (errors.hasErrors()) {
