@@ -14,11 +14,11 @@
 
     <tr>
         <th><a th:href="@{/(sortfield=date, sortdir=asc)}">Start Date</a></th>
-        <th><a th:href="@{/(sortfield=name, sortdir=asc)}">Game Name</a></th>
-        <th><a th:href="@{/(sortfield=number, sortdir=asc)}">Number</a></th>
-        <th><a th:href="@{/(sortfield=price, sortdir=asc)}">Ticket Price</a></th>
-        <th><a th:href="@{/(sortfield=return, sortdir=desc)}">Expected Return</a></th>
-        <th><a th:href="@{/(sortfield=percentage, sortdir=desc)}">As Percentage of Ticket Price</a></th>
+        <th th:replace="index :: namesort"></th>
+        <th th:replace="index :: numbersort"></th>
+        <th th:replace="index :: pricesort"></th>
+        <th th:replace="index :: returnsort"></th>
+        <th th:replace="index :: returnpercentagesort"></th>
     </tr>
 
     <tr th:replace="index :: results">

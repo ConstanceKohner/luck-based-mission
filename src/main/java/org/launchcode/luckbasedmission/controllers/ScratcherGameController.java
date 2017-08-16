@@ -172,7 +172,7 @@ public class ScratcherGameController {
         }
         model.addAttribute("allgames", allgames.values());
         model.addAttribute("title", "All Scratcher Game Overviews");
-        return "index";
+        return "overviewindex";
     }
 
     //display specific view for each game
@@ -375,8 +375,6 @@ public class ScratcherGameController {
     }
 
     //TODO "simulate odds based on this game" takes user to a form for a CustomGame with starting values equal to the game they chose
-    //not the neatest way to do this, but the previous attempt with get requests was not building properly
-    //todo: refactor it
     @RequestMapping(value="customize", method=RequestMethod.GET)
     public String displayCustomGameSelection (Model model, @RequestParam(name="scratcherGameUID", defaultValue = "0") Integer scratcherGameUID) {
         if (scratcherGameUID.equals(0)) {
@@ -391,7 +389,8 @@ public class ScratcherGameController {
         }
     }
 
-    @RequestMapping(value="customize/{id}", method=RequestMethod.POST)
+    //TODO THIS IS THE KEY
+    @RequestMapping(value="customize", method=RequestMethod.POST)
     public String processCustomGameForm (@ModelAttribute @Valid ScratcherGameCustom scratcherGameCustom, Errors errors, Model model, @PathVariable int originalGameId) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Customize This Game");
