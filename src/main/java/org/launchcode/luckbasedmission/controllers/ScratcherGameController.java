@@ -291,11 +291,19 @@ public class ScratcherGameController {
             int startMonth = Integer.parseInt(fullDate.split("-")[1]);
             int startDay = Integer.parseInt(fullDate.split("-")[2]);
             int startYear = Integer.parseInt(fullDate.split("-")[0]);
+            /*OVERVIEW VERSION
+            int createdMonth = startMonth;
+            int createdDay = startDay;
+            int createdYear = startYear;
+            //END OVERVIEW VERSION
+            */
+            //SNAPSHOT VERSION
             //get the current date and save those, too
             LocalDate today = LocalDate.now();
             int createdMonth = today.getMonth().getValue();
             int createdDay = today.getDayOfMonth();
             int createdYear = today.getYear();
+            //END SNAPSHOT VERSION
             //first, take all the words before the comma in average chances.  then, take the third word, which should be the odds.
             String chance = (((doc.select("dd").last()).text()).split(",")[0]).split(" ")[2];
             //turn into double
@@ -336,10 +344,10 @@ public class ScratcherGameController {
             scratcherGameOverview.setAverageWinLossChance(averageWinLossChance);
             scratcherGameOverview.setAllPrizes(allPrizes);
             scratcherGameOverview.recalculateOdds();
-            scratcherGameDao.save(scratcherGameOverview);*/
+            scratcherGameDao.save(scratcherGameOverview);
+            */
 
             //this is the Snapshot version, to be used with i % 3 != 1
-
             ScratcherGameSnapshot scratcherGameSnapshot = new ScratcherGameSnapshot();
 
             Iterable <ScratcherGameOverview> overviews = scratcherGameOverviewDao.findAll();
@@ -365,27 +373,34 @@ public class ScratcherGameController {
         }
             return "redirect:";
     }
-/*
-    //TODO "simulate odds based on this game" takes user to a form for a CustomGame with starting values equal to the game they chose
-    @RequestMapping(value="addCustom", method=RequestMethod.GET)
-    public String displayCustomGameForm (Model model) {
-        model.addAttribute("title", "Customize Scratcher Game");
-        model.addAttribute(new ScratcherGameCustom());
-        model.addAttribute("scratcherGame", scratcherGameDao.findAll());
-        return "addcustomgame";
-    }
 
-    @RequestMapping(value="addCustom", method=RequestMethod.POST)
-    //public String processCustomGameForm (@ModelAttribute @Valid ScratcherGameCustom scratcherGameCustom, Errors errors, @RequestParam int originalGameId, Model model) {
-    public String processCustomGameForm (@ModelAttribute @Valid ScratcherGameCustom scratcherGameCustom, Errors errors, Model model) {
-        if (errors.hasErrors()) {
-            model.addAttribute("title", "Customize Scratcher Game");
+    //TODO "simulate odds based on this game" takes user to a form for a CustomGame with starting values equal to the game they chose
+    //not the neatest way to do this, but the previous attempt with get requests was not building properly
+    //todo: refactor it
+    @RequestMapping(value="customize", method=RequestMethod.GET)
+    public String displayCustomGameSelection (Model model, @RequestParam(name="scratcherGameUID", defaultValue = "0") Integer scratcherGameUID) {
+        if (scratcherGameUID.equals(0)) {
+            model.addAttribute("title", "Choose A Scratcher Game To Customize");
+            model.addAttribute("scratcherGames", scratcherGameDao.findAll());
+            return "selectoverview";
+        } else {
+            model.addAttribute("title", "Customize This Game");
+            model.addAttribute("scratcherGame", scratcherGameDao.findOne(scratcherGameUID));
+            model.addAttribute(new ScratcherGameCustom());
             return "addcustomgame";
         }
-        //ScratcherGame scratcherGame = scratcherGameDao.findOne(originalGameId);
-        //scratcherGameCustom.setScratcherGame(scratcherGame);
+    }
+
+    @RequestMapping(value="customize/{id}", method=RequestMethod.POST)
+    public String processCustomGameForm (@ModelAttribute @Valid ScratcherGameCustom scratcherGameCustom, Errors errors, Model model, @PathVariable int originalGameId) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Customize This Game");
+            return "addcustomgame";
+        }
+        ScratcherGame scratcherGame = scratcherGameDao.findOne(originalGameId);
+        scratcherGameCustom.setAssociatedGame(scratcherGame);
         scratcherGameCustomDao.save(scratcherGameCustom);
         return "redirect:";
     }
-    */
+
 }
