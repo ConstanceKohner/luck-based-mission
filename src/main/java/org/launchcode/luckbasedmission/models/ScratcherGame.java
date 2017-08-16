@@ -69,6 +69,10 @@ public abstract class ScratcherGame{
     //this is the most important part of the Object, short of the identifiers
     private double expectedReturn;
 
+    @OneToMany
+    @JoinColumn(name = "scratcher_game_uid_number")
+    private List<ScratcherGameCustom> customGames = new ArrayList<>();
+
     //empty constructor
     public ScratcherGame() {
     }

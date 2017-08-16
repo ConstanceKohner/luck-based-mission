@@ -11,15 +11,15 @@ import java.time.LocalDate;
 public class ScratcherGameCustom extends ScratcherGame {
 
     @ManyToOne
-    private ScratcherGameOverview overviewGame;
+    private ScratcherGame associatedGame;
 
     public ScratcherGameCustom() {}
 
-    public ScratcherGameOverview getOverviewGame() {
-        return overviewGame;
+    public ScratcherGame getAssociatedGame() {
+        return associatedGame;
     }
 
-    public void setOverviewGame(ScratcherGameOverview overviewGame) {
-        this.overviewGame = overviewGame;
+    public void setAssociatedGame(ScratcherGame associatedGame) {
+        this.associatedGame = associatedGame;
     }
 }
