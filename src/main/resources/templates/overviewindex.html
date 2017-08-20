@@ -11,6 +11,7 @@
 <p th:unless="${allgames} and ${allgames.size()}">No games have been loaded into the database</p>
 
 <table class="table">
+    <!-- TODO: specific views for sorting -->
 
     <tr>
         <th><a th:href="@{/overviews/(sortfield=date, sortdir=desc)}">Start Date</a></th>

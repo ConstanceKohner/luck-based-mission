@@ -175,6 +175,19 @@ public class ScratcherGameController {
         return "overviewindex";
     }
 
+    @RequestMapping(value = "/customizations")
+    public String allCustomizations (Model model) {
+        //to ensure same sort as index view, refactor once comparators come into play
+        Iterable<ScratcherGameCustom> allCustomizations = scratcherGameCustomDao.findAll();
+        HashMap<Integer, ScratcherGameCustom> allgames = new HashMap<>();
+        for (ScratcherGameCustom game : allCustomizations) {
+            allgames.put(game.getGameID(), game);
+        }
+        model.addAttribute("allgames", allgames.values());
+        model.addAttribute("title", "All Custom Scratcher Games");
+        return "customindex";
+    }
+
     //display specific view for each game
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String individualView (Model model, @PathVariable int id) {
@@ -374,7 +387,6 @@ public class ScratcherGameController {
             return "redirect:";
     }
 
-    //TODO "simulate odds based on this game" takes user to a form for a CustomGame with starting values equal to the game they chose
     @RequestMapping(value="customize", method=RequestMethod.GET)
     public String displayCustomGameSelection (Model model, @RequestParam(name="scratcherGameUID", defaultValue = "0") Integer scratcherGameUID) {
         if (scratcherGameUID.equals(0)) {
@@ -383,21 +395,41 @@ public class ScratcherGameController {
             return "selectoverview";
         } else {
             model.addAttribute("title", "Customize This Game");
-            model.addAttribute("scratcherGame", scratcherGameDao.findOne(scratcherGameUID));
-            model.addAttribute(new ScratcherGameCustom());
+            ScratcherGame associatedScratcherGame = scratcherGameDao.findOne(scratcherGameUID);
+            model.addAttribute("associatedScratcherGame", associatedScratcherGame);
+            ScratcherGameCustom scratcherGameCustom = new ScratcherGameCustom();
+            scratcherGameCustom.setName(associatedScratcherGame.getName());
+            scratcherGameCustom.setGameID(associatedScratcherGame.getGameID());
+            scratcherGameCustom.setTicketPrice(associatedScratcherGame.getTicketPrice());
+            scratcherGameCustom.setAverageWinLossChance(associatedScratcherGame.getAverageWinLossChance());
+            scratcherGameCustom.setAllPrizes(associatedScratcherGame.getAllPrizes());
+            model.addAttribute(scratcherGameCustom);
             return "addcustomgame";
         }
     }
 
-    //TODO THIS IS THE KEY
     @RequestMapping(value="customize", method=RequestMethod.POST)
-    public String processCustomGameForm (@ModelAttribute @Valid ScratcherGameCustom scratcherGameCustom, Errors errors, Model model, @PathVariable int originalGameId) {
+    public String processCustomGameForm (@ModelAttribute @Valid ScratcherGameCustom scratcherGameCustom, Errors errors, Model model, @RequestParam(name="scratcherGameUID", defaultValue = "0") Integer scratcherGameUID) {
+        String CSV = scratcherGameCustom.getAllPrizes();
+        if (CSV.split(",").length % 2 == 1) {
+            errors.rejectValue("allprizes", "prizes.length", "There is an odd number of values or they are not properly seperated by commas.");
+        }
+
         if (errors.hasErrors()) {
             model.addAttribute("title", "Customize This Game");
             return "addcustomgame";
         }
-        ScratcherGame scratcherGame = scratcherGameDao.findOne(originalGameId);
+        scratcherGameCustom.setAllPrizes(CSV.trim());
+        scratcherGameCustom.recalculateOdds();
+        ScratcherGame scratcherGame = scratcherGameDao.findOne(scratcherGameUID);
         scratcherGameCustom.setAssociatedGame(scratcherGame);
+        scratcherGameCustom.setStartDay(scratcherGame.getStartDay());
+        scratcherGameCustom.setStartMonth(scratcherGame.getStartMonth());
+        scratcherGameCustom.setStartYear(scratcherGame.getStartYear());
+        LocalDate today = LocalDate.now();
+        scratcherGameCustom.setCreatedMonth(today.getMonth().getValue());
+        scratcherGameCustom.setCreatedDay(today.getDayOfMonth());
+        scratcherGameCustom.setCreatedYear(today.getYear());
         scratcherGameCustomDao.save(scratcherGameCustom);
         return "redirect:";
     }
