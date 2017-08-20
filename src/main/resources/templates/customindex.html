@@ -11,17 +11,23 @@
 <p th:unless="${allgames} and ${allgames.size()}">No games have been loaded into the database</p>
 
 <table class="table">
-<!-- TODO: specific views for sorting -->
+
     <tr>
-        <th><a th:href="@{/customizations/(sortfield=date, sortdir=desc)}">Start Date</a></th>
-        <th><a th:href="@{/customizations/(sortfield=name, sortdir=asc)}">Game Name</a></th>
-        <th><a th:href="@{/customizations/(sortfield=number, sortdir=asc)}">Number</a></th>
-        <th><a th:href="@{/customizations/(sortfield=price, sortdir=asc)}">Ticket Price</a></th>
-        <th><a th:href="@{/customizations/(sortfield=return, sortdir=desc)}">Expected Return</a></th>
-        <th><a th:href="@{/customizations/(sortfield=percentage, sortdir=desc)}">As Percentage of Ticket Price</a></th>
+        <th th:fragment="datesort"><a th:href="@{/customizations/(sortfield=date, sortdir=desc)}">Customization Date</a></th>
+        <th th:fragment="namesort"><a th:href="@{/customizations/(sortfield=name, sortdir=asc)}">Game Name</a></th>
+        <th th:fragment="numbersort"><a th:href="@{/customizations/(sortfield=number, sortdir=asc)}">Number</a></th>
+        <th th:fragment="pricesort"><a th:href="@{/customizations/(sortfield=price, sortdir=asc)}">Ticket Price</a></th>
+        <th th:fragment="returnsort"><a th:href="@{/customizations/(sortfield=return, sortdir=desc)}">Expected Return</a></th>
+        <th th:fragment="returnpercentagesort"><a th:href="@{/customizations/(sortfield=percentage, sortdir=desc)}">As Percentage of Ticket Price</a></th>
     </tr>
 
-    <tr th:replace="index :: results">
+    <tr th:fragment="results" th:each="game : ${allgames}">
+        <td><p th:text="${game.getCreatedDate()}">Default Text</p></td>
+        <td><a th:href="'/' + ${game.uidNumber}" th:text="${game.name}">Default Text</a></td>
+        <td><p th:text="'#' + ${game.gameID}">Default Text</p></td>
+        <td><p th:text="${game.getTicketPriceFormatted()}">Default Text</p></td>
+        <td><p th:class="${game.getSign()}" th:text="${game.getExpectedReturnFormatted()}">Default Text</p></td>
+        <td><p th:class="${game.getSign()}" th:text="${game.getReturnPercentageFormatted()}">Default Text</p></td>
     </tr>
 
 </table>

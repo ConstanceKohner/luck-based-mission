@@ -163,27 +163,213 @@ public class ScratcherGameController {
     }
 
     @RequestMapping(value = "/overviews")
-    public String allOverviews (Model model) {
+    public String allOverviews (Model model, @RequestParam(name="sortfield", defaultValue = "date") String sortfield,
+                                @RequestParam(name="sortdir", defaultValue = "desc") String sortdir) {
         //to ensure same sort as index view, refactor once comparators come into play
         Iterable<ScratcherGameOverview> allOverviews = scratcherGameOverviewDao.findAll();
         HashMap<Integer, ScratcherGameOverview> allgames = new HashMap<>();
         for (ScratcherGameOverview game : allOverviews) {
             allgames.put(game.getGameID(), game);
         }
-        model.addAttribute("allgames", allgames.values());
-        model.addAttribute("title", "All Scratcher Game Overviews");
+
+        ArrayList<ScratcherGameOverview> allGames = new ArrayList<>();
+        allGames.addAll(allgames.values());
+
+        //sort based on request params
+        //nested in case sortfield is specified but sortdir is not (or is set incorrectly); should not be possible if clicking app links but possible with user error
+        if (sortfield.equals("date")) {
+            if (sortdir.equals("desc")) {
+                DateComparator comparator = new DateComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewdateindex";
+            } else {
+                DateComparator comparator = new DateComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewindex";
+            }
+        } else if (sortfield.equals("name")) {
+            if (sortdir.equals("asc")) {
+                NameComparator comparator = new NameComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewnameindex";
+            } else {
+                NameComparator comparator = new NameComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewindex";
+            }
+        } else if (sortfield.equals("number")) {
+            if (sortdir.equals("asc")) {
+                NumberComparator comparator = new NumberComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewnumberindex";
+            } else {
+                NumberComparator comparator = new NumberComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewindex";
+            }
+        } else if (sortfield.equals("price")) {
+            if (sortdir.equals("asc")) {
+                PriceComparator comparator = new PriceComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewpriceindex";
+            } else {
+                PriceComparator comparator = new PriceComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewindex";
+            }
+        } else if (sortfield.equals("return")) {
+            if (sortdir.equals("desc")) {
+                ReturnComparator comparator = new ReturnComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewreturnindex";
+            } else {
+                ReturnComparator comparator = new ReturnComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewindex";
+            }
+        } else if (sortfield.equals("percentage")) {
+            if (sortdir.equals("desc")) {
+                ReturnPercentageComparator comparator = new ReturnPercentageComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewreturnpercentageindex";
+            } else {
+                ReturnPercentageComparator comparator = new ReturnPercentageComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Scratcher Games Overviews");
+                return "overviewindex";
+            }
+        }
+        //if the request params don't match the options above, just use the default sort
+        DateComparator comparator = new DateComparator();
+        allGames.sort(comparator);
+        model.addAttribute("allgames", allGames);
+        model.addAttribute("title", "All Scratcher Games Overviews");
         return "overviewindex";
     }
 
     @RequestMapping(value = "/customizations")
-    public String allCustomizations (Model model) {
-        //to ensure same sort as index view, refactor once comparators come into play
-        Iterable<ScratcherGameCustom> allCustomizations = scratcherGameCustomDao.findAll();
-        HashMap<Integer, ScratcherGameCustom> allgames = new HashMap<>();
-        for (ScratcherGameCustom game : allCustomizations) {
-            allgames.put(game.getGameID(), game);
+    public String allCustomizations (Model model, @RequestParam(name="sortfield", defaultValue = "date") String sortfield,
+                                     @RequestParam(name="sortdir", defaultValue = "desc") String sortdir) {
+        //put all games from the map into a list so they can be sorted
+        ArrayList<ScratcherGameCustom> allGames = new ArrayList<>();
+        for (ScratcherGameCustom scratcherGameCustom : scratcherGameCustomDao.findAll()) {
+            allGames.add(scratcherGameCustom);
         }
-        model.addAttribute("allgames", allgames.values());
+
+        //sort based on request params
+        //nested in case sortfield is specified but sortdir is not (or is set incorrectly); should not be possible if clicking app links but possible with user error
+        if (sortfield.equals("date")) {
+            if (sortdir.equals("desc")) {
+                DateComparator comparator = new DateComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customdateindex";
+            } else {
+                DateComparator comparator = new DateComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customindex";
+            }
+        } else if (sortfield.equals("name")) {
+            if (sortdir.equals("asc")) {
+                NameComparator comparator = new NameComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customnameindex";
+            } else {
+                NameComparator comparator = new NameComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customindex";
+            }
+        } else if (sortfield.equals("number")) {
+            if (sortdir.equals("asc")) {
+                NumberComparator comparator = new NumberComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customnumberindex";
+            } else {
+                NumberComparator comparator = new NumberComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customindex";
+            }
+        } else if (sortfield.equals("price")) {
+            if (sortdir.equals("asc")) {
+                PriceComparator comparator = new PriceComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "custompriceindex";
+            } else {
+                PriceComparator comparator = new PriceComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customindex";
+            }
+        } else if (sortfield.equals("return")) {
+            if (sortdir.equals("desc")) {
+                ReturnComparator comparator = new ReturnComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customreturnindex";
+            } else {
+                ReturnComparator comparator = new ReturnComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customindex";
+            }
+        } else if (sortfield.equals("percentage")) {
+            if (sortdir.equals("desc")) {
+                ReturnPercentageComparator comparator = new ReturnPercentageComparator();
+                allGames.sort(comparator);
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customreturnpercentageindex";
+            } else {
+                ReturnPercentageComparator comparator = new ReturnPercentageComparator();
+                allGames.sort(Collections.reverseOrder(comparator));
+                model.addAttribute("allgames", allGames);
+                model.addAttribute("title", "All Custom Scratcher Games");
+                return "customindex";
+            }
+        }
+        //if the request params don't match the options above, just use the default sort
+        DateComparator comparator = new DateComparator();
+        allGames.sort(comparator);
+        model.addAttribute("allgames", allGames);
         model.addAttribute("title", "All Custom Scratcher Games");
         return "customindex";
     }
@@ -431,7 +617,7 @@ public class ScratcherGameController {
         scratcherGameCustom.setCreatedDay(today.getDayOfMonth());
         scratcherGameCustom.setCreatedYear(today.getYear());
         scratcherGameCustomDao.save(scratcherGameCustom);
-        return "redirect:";
+        return "redirect:/customizations";
     }
 
 }

@@ -11,15 +11,14 @@
 <p th:unless="${allgames} and ${allgames.size()}">No games have been loaded into the database</p>
 
 <table class="table">
-    <!-- TODO: specific views for sorting -->
 
     <tr>
-        <th><a th:href="@{/overviews/(sortfield=date, sortdir=desc)}">Start Date</a></th>
-        <th><a th:href="@{/overviews/(sortfield=name, sortdir=asc)}">Game Name</a></th>
-        <th><a th:href="@{/overviews/(sortfield=number, sortdir=asc)}">Number</a></th>
-        <th><a th:href="@{/overviews/(sortfield=price, sortdir=asc)}">Ticket Price</a></th>
-        <th><a th:href="@{/overviews/(sortfield=return, sortdir=desc)}">Expected Return</a></th>
-        <th><a th:href="@{/overviews/(sortfield=percentage, sortdir=desc)}">As Percentage of Ticket Price</a></th>
+        <th th:fragment="datesort"><a th:href="@{/overviews/(sortfield=date, sortdir=desc)}">Start Date</a></th>
+        <th th:fragment="namesort"><a th:href="@{/overviews/(sortfield=name, sortdir=asc)}">Game Name</a></th>
+        <th th:fragment="numbersort"><a th:href="@{/overviews/(sortfield=number, sortdir=asc)}">Number</a></th>
+        <th th:fragment="pricesort"><a th:href="@{/overviews/(sortfield=price, sortdir=asc)}">Ticket Price</a></th>
+        <th th:fragment="returnsort"><a th:href="@{/overviews/(sortfield=return, sortdir=desc)}">Expected Return</a></th>
+        <th th:fragment="returnpercentagesort"><a th:href="@{/overviews/(sortfield=percentage, sortdir=desc)}">As Percentage of Ticket Price</a></th>
     </tr>
 
     <tr th:replace="index :: results">

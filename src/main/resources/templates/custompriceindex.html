@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<p th:unless="${allgames} and ${allgames.size()}">No games have been loaded into the database</p>
+
+<table class="table">
+
+    <tr>
+        <th th:replace="customindex :: datesort"></th>
+        <th th:replace="customindex :: namesort"></th>
+        <th th:replace="customindex :: numbersort"></th>
+        <th><a th:href="@{/customizations/(sortfield=price, sortdir=desc)}">Ticket Price</a></th>
+        <th th:replace="customindex :: returnsort"></th>
+        <th th:replace="customindex :: returnpercentagesort"></th>
+    </tr>
+
+    <tr th:replace="customindex :: results">
+    </tr>
+
+</table>
+
+</body>
+</html>
