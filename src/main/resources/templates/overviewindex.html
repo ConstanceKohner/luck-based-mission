@@ -8,8 +8,6 @@
 
 <nav th:replace="fragments :: navigation"></nav>
 
-<p th:unless="${allgames} and ${allgames.size()}">No games have been loaded into the database</p>
-
 <table class="table">
 
     <tr>
@@ -25,6 +23,8 @@
     </tr>
 
 </table>
+
+<p th:fragment="nogames" th:unless="${allgames} and ${allgames.size()}">No scratcher games have been loaded into the database</p>
 
 </body>
 </html>
